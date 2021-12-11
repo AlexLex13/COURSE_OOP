@@ -312,6 +312,11 @@ namespace MyNameSpace
 		return this->id;
 	}
 
+	void Doctor::PrintPeople()
+	{
+		cout << this->id << " " << this->surname << " " << this->name << " " << this->patronymic << endl;
+	}
+
 	template<class T>
 	T Date<T>::Get_month()
 	{
@@ -508,6 +513,14 @@ namespace MyNameSpace
 		}
 		fs.close();
 
+		vector<string> amount_spec = {"Терапевт",
+				"Хирург",
+				"Офтальмолог",
+				"Уролог",
+				"Акушер-гинеколог",
+				"Врач общей практики(семейный врач)",
+				"Оториноларинголог", "Стоматолог-терапевт", "Стоматолог-хирург", "Невролог" };
+
 		while(true) 
 		{
 			cout << "1.Терапевт\n"
@@ -527,7 +540,6 @@ namespace MyNameSpace
 			else
 				break;
 		}
-		this->doctor_specialization = speciality[choice_of_specialty - 1];
 		system("cls");
 
 		while (true)
@@ -539,33 +551,41 @@ namespace MyNameSpace
 			if (choice == 1)
 			{
 				cout << "Выберите конкретного специалиста: " << endl;
-				for (int i = (choice_of_specialty - 1) * 3, ch = 1; i < choice_of_specialty * 3 - 1; i++)
+				for (unsigned int i = 0; i < doct.size(); i++)
 				{
-					cout << ch << " - " << doct[i] << endl;
-					ch++;
+					if (amount_spec[choice_of_specialty - 1] == doct.at(i).Get_specialization())
+						doct.at(i).PrintPeople();
 				}
+				cout << "Введите Id выбранного специалиста";
 				check(specialist);
-				if (specialist < 1 || specialist > 3)
+				if (specialist < 1)
 				{
 					Warning(); continue;
 				}
 				else
 				{
-					this->doctor = doct[(choice_of_specialty - 1) * 3 + specialist - 1];
+					for (unsigned int i = 0; i < doct.size(); i++)
+					{
+						if (specialist == doct.at(i).Get_ID())
+						{
+							this->spec = doct.at(i).Get_specialization();
+							this->doctor = doct.at(i).Get_surname() + doct.at(i).Get_name() + doct.at(i).Get_patronymic();
+						}
+					}
 					break;
 				}
 			}
-			else if (choice == 2)
+			/*else if (choice == 2)
 			{
-				this->doctor = doct[(choice_of_specialty - 1) * 3];
+				this->doctor = doct[];
 				break;
-			}
+			}*/
 			else
 				Warning();
 		}
 		system("cls");
 
-		this->cabinet = choice_of_specialty*100 + ((choice_of_specialty - 1) * 3 + specialist - 1);
+		this->cabinet = rand()%1000 + 101;
 		this->date.SetDate();
 		system("cls");
 		cout << "Ваш талон: \n\n";
@@ -582,6 +602,16 @@ namespace MyNameSpace
 		this->cabinet = cabinet;
 	}
 
+	string Ticket::Get_doctor()
+	{
+		return this->doctor;
+	}
+
+	string Ticket::Get_spec()
+	{
+		return this->spec;
+	}
+
 	void Ticket::WriteFile(string path)
 	{
 		fstream fs;
@@ -593,15 +623,29 @@ namespace MyNameSpace
 		}
 		else
 		{
+			for (unsigned int i = 0; i < this->doctor.length(); i++)
+			{
+				if (this->doctor[i] == ' ')
+					this->doctor[i] = '`';
+			}
 			fs << *this;
 		}
 
 		fs.close();
 	}
 
+	void Ticket::Change_str()
+	{
+		for (unsigned int i = 0; i < this->doctor.length(); i++)
+		{
+			if (this->doctor[i] == '`')
+				this->doctor[i] = ' ';
+		}
+	}
+
 	void Ticket::PrintTicket()
 	{
-		cout << "\nВрач - " << this->Get_doctor_specialization() << " - "
+		cout << "\nВрач - " << this->Get_spec() << " - "
 			<< this->Get_doctor() << "; кабинет - "
 			<< this->Get_cabinet() << "; дата - "
 			<< this->date.Get_day() << "."
@@ -732,9 +776,9 @@ namespace MyNameSpace
 
 	ostream& operator<<(ostream& os, Ticket& point)
 	{
-		os << "\n" << point.Get_doctor_specialization() << " "
-			<< point.Get_doctor() << " "
-			<< point.Get_cabinet() << " "
+		os << "\n" << point.spec << " "
+			<< point.doctor << " "
+			<< point.cabinet << " "
 			<< point.date.Get_month() << " "
 			<< point.date.Get_day() << " "
 			<< point.date.Get_time();
@@ -742,14 +786,11 @@ namespace MyNameSpace
 	}
 	istream& operator>>(istream& is, Ticket& point)
 	{
-		string a, b, c;
-		int O, A, B;
-		is >> a;
-		point.Set_doctor_specialization(a);
-		is >> b;
-		point.Set_doctor(b);
-		is >> O;
-		point.Set_cabinet(O);
+		string c;
+		int A, B;
+		is >> point.spec;
+		is >> point.doctor;
+		is >> point.cabinet;
 		is >> A;
 		point.date.Set_month(A);
 		is >> B;
