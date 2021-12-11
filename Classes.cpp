@@ -246,6 +246,72 @@ namespace MyNameSpace
 		this->passwordA = passwordA;
 	}
 
+	void Administrator::WriteFile(string path)
+	{
+		fstream fs;
+		fs.open(path, fstream::in | fstream::out | fstream::app);
+
+		if (!fs.is_open())
+		{
+			cout << "Error!" << endl;
+		}
+		else
+		{
+			fs << *this;
+		}
+		fs.close();
+	}
+
+	void Doctor::SetID(int value)
+	{
+		id = value;
+	}
+	void Doctor::ChangeID()
+	{
+		id++;
+	}
+	int Doctor::id = 0;
+
+	void Doctor::SetUser()
+	{
+		cout << "<<< Меню добавления врача>>>\n\n";
+		ChangeID();
+		this->id = id;
+		cout << "Введите имя врача: ";
+		cin >> name;
+		this->name = name;
+		cout << "Введите фамилию врача: ";
+		cin >> surname;
+		this->surname = surname;
+		cout << "Введите отчество врача: ";
+		cin >> patronymic;
+		this->patronymic = patronymic;
+		cout << "Введите специализацию врача: ";
+		cin >> specialization;
+		this->specialization = specialization;
+	}
+
+	void Doctor::WriteFile(string path)
+	{
+		fstream fs;
+		fs.open(path, fstream::in | fstream::out | fstream::app);
+
+		if (!fs.is_open())
+		{
+			cout << "Error!" << endl;
+		}
+		else
+		{
+			fs << *this;
+		}
+		fs.close();
+	}
+
+	int Doctor::Get_ID()
+	{
+		return this->id;
+	}
+
 	template<class T>
 	T Date<T>::Get_month()
 	{
@@ -417,20 +483,30 @@ namespace MyNameSpace
 	void Ticket::SetTicket()
 	{	
 		int choice_of_specialty, specialist;
+		vector<Doctor> doct;
+		Doctor DCT;
 
-		vector<string> speciality = {"Терапевт", "Хирург", "Офтальмолог", "Уролог", "Акушер-гинеколог", "Врач общей практики(семейный врач)",
-			"Оториноларинголог", "Стоматолог-терапевт", "Стоматолог-хирург", "Невролог" };
+		fstream fs;
+		fs.open("doc.txt", fstream::in | fstream::out | ios::app);
 
-		vector<string> doct = {"Забужко Карл Иванович", "Коровяк Ефрем Богданович", "Лобанов Юлий Александрович",
-			"Кузнецов Цицерон Иванович", "Лобанов Пётр Владимирович", "Моисеенко Чарльз Львович",
-			"Гелетей Светлана Ярославовна", "Корнейчук Ника Фёдоровна", "Лазарева Ульяна Михайловна"
-			"Анисимов Шамиль Дмитриевич", "Петрик Оскар Вадимович", "Сазонов Павел Брониславович",
-			"Грабчак Злата Ивановна", "Дементьева Марина Виталиевна","Тарасова Белла Васильевна",
-			"Быкова Чара Анатолиевна", "Захарова Злата Богдановна", "Колобова Полина Станиславовна",
-			"Гребневский Ростислав Юхимович", "Рябов Василий Евгеньевич", "Шумейко Йозеф Артёмович",
-			"Бердник Евгения Леонидовнаадеева", "Фадеева Устинья Юхимовна", "Федосеева Людмила Ярославовна",
-			"Кличко Йонас Владимирович", "Князев Давид Михайлович", "Шаров Шамиль Анатолиевич",
-			"Кириллова Любовь Сергеевна", "Никитина Йоони Юхимовна", "Ширяева Ева Станиславовна"};
+		if (!fs.is_open())
+		{
+			cout << "Error!" << endl;
+		}
+		else if (fs.peek() == EOF)
+		{
+			Doctor::SetID(0);
+		}
+		else
+		{
+			while (!fs.eof())
+			{
+				fs >> DCT;
+				doct.push_back(DCT);
+				Doctor::SetID(DCT.Get_ID());
+			}
+		}
+		fs.close();
 
 		while(true) 
 		{
@@ -533,15 +609,6 @@ namespace MyNameSpace
 			<< this->date.Get_time() << "|;" << endl;
 	}
 
-	void Ticket::Change_str()
-	{
-		for (unsigned int i = 0; i < this->doctor.length(); i++)
-		{
-			if (this->doctor[i] == '`')
-				this->doctor[i] = ' ';
-		}
-	}
-
 	void Medical_card::SetCard()
 	{
 		this->patient.SetUser();
@@ -619,6 +686,22 @@ namespace MyNameSpace
 		point.patient.Set_year_of_birth(b);
 		is >> D;
 		point.patient.Set_adress(D);
+		return is;
+	}
+
+	ostream & operator<<(ostream & os, const Doctor & point)
+	{
+		os << "\n" << point.id << point.surname << " " << point.name << " " << point.patronymic << " " << point.specialization;
+		return os;
+	}
+
+	istream & operator>>(istream & is, Doctor & point)
+	{
+		is >> point.id;
+		is >> point.surname;
+		is >> point.name;
+		is >> point.patronymic;
+		is >> point.specialization;
 		return is;
 	}
 
