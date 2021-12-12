@@ -267,7 +267,7 @@ namespace MyNameSpace
 		fs.close();
 	}
 
-	void Administrator::ReadFile(string path, Administrator ad, deque<Administrator> dq_ad)
+	void Administrator::ReadFile(string path, Administrator &ad, deque<Administrator> &dq_ad)
 	{
 		fstream fs;
 
@@ -290,22 +290,32 @@ namespace MyNameSpace
 		fs.close();
 	}
 
-	void Doctor::SetID(int value)
+	void Administrator::PrintPeople()
 	{
-		id = value;
-	}
-	void Doctor::ChangeID()
-	{
-		id++;
+		cout << this->nameA << endl;
 	}
 
-	int Doctor::id = 0;
+	string Administrator::Get_nameA()
+	{
+		return this->nameA;
+	}
+
+	void Doctor::SetCnt(int value)
+	{
+		cnt = value;
+	}
+	void Doctor::ChangeCnt()
+	{
+		cnt++;
+	}
+
+	int Doctor::cnt = 0;
 
 	void Doctor::SetUser()
 	{
 		cout << "<<< Меню добавления врача>>>\n\n";
-		ChangeID();
-		this->id = id;
+		ChangeCnt();
+		this->id = cnt;
 		cout << "Введите имя врача: ";
 		cin >> name;
 		this->name = name;
@@ -549,7 +559,7 @@ namespace MyNameSpace
 		}
 		else if (fs.peek() == EOF)
 		{
-			Doctor::SetID(0);
+			Doctor::SetCnt(0);
 		}
 		else
 		{
@@ -557,7 +567,7 @@ namespace MyNameSpace
 			{
 				fs >> DCT;
 				doct.push_back(DCT);
-				Doctor::SetID(DCT.Get_ID());
+				Doctor::SetCnt(DCT.Get_ID());
 			}
 		}
 		fs.close();
@@ -784,7 +794,7 @@ namespace MyNameSpace
 
 	ostream & operator<<(ostream & os, const Doctor & point)
 	{
-		os << "\n" << point.id<< " " << point.surname << " " << point.name << " " << point.patronymic << " " << point.specialization;
+		os << "\n" << point.id << " " << point.surname << " " << point.name << " " << point.patronymic << " " << point.specialization;
 		return os;
 	}
 	istream & operator>>(istream & is, Doctor & point)
