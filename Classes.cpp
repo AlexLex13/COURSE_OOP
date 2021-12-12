@@ -792,12 +792,12 @@ namespace MyNameSpace
 		return is;
 	}
 
-	ostream & operator<<(ostream & os, const Doctor & point)
+	ostream & operator<<(ostream& os, const Doctor& point)
 	{
 		os << "\n" << point.id << " " << point.surname << " " << point.name << " " << point.patronymic << " " << point.specialization;
 		return os;
 	}
-	istream & operator>>(istream & is, Doctor & point)
+	istream & operator>>(istream& is, Doctor& point)
 	{
 		is >> point.id;
 		is >> point.surname;
