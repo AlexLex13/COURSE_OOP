@@ -201,6 +201,11 @@ namespace MyNameSpace
 		}
 		else
 		{
+			for (unsigned int i = 0; i < this->adress.length(); i++)
+			{
+				if (this->adress[i] == ' ')
+					this->adress[i] = '`';
+			}
 			fs << *this;
 		}
 		fs.close();
@@ -262,6 +267,29 @@ namespace MyNameSpace
 		fs.close();
 	}
 
+	void Administrator::ReadFile(string path, Administrator ad, deque<Administrator> dq_ad)
+	{
+		fstream fs;
+
+		fs.open(path, fstream::in | fstream::out | ios::app);
+
+		if (!fs.is_open())
+		{
+			cout << "Error!" << endl;
+		}
+		else if (fs.peek() == EOF)
+			cout << "-" << endl;
+		else
+		{
+			while (!fs.eof())
+			{
+				fs >> ad;
+				dq_ad.push_back(ad);
+			}
+		}
+		fs.close();
+	}
+
 	void Doctor::SetID(int value)
 	{
 		id = value;
@@ -270,6 +298,7 @@ namespace MyNameSpace
 	{
 		id++;
 	}
+
 	int Doctor::id = 0;
 
 	void Doctor::SetUser()
@@ -315,6 +344,26 @@ namespace MyNameSpace
 	void Doctor::PrintPeople()
 	{
 		cout << this->id << " " << this->surname << " " << this->name << " " << this->patronymic << endl;
+	}
+
+	string Doctor::Get_name()
+	{
+		return this->name;
+	}
+
+	string Doctor::Get_surname()
+	{
+		return this->surname;
+	}
+
+	string Doctor::Get_patronymic()
+	{
+		return this->patronymic;
+	}
+
+	string Doctor::Get_specialization()
+	{
+		return this->specialization;
 	}
 
 	template<class T>
@@ -735,10 +784,9 @@ namespace MyNameSpace
 
 	ostream & operator<<(ostream & os, const Doctor & point)
 	{
-		os << "\n" << point.id << point.surname << " " << point.name << " " << point.patronymic << " " << point.specialization;
+		os << "\n" << point.id<< " " << point.surname << " " << point.name << " " << point.patronymic << " " << point.specialization;
 		return os;
 	}
-
 	istream & operator>>(istream & is, Doctor & point)
 	{
 		is >> point.id;
@@ -828,6 +876,8 @@ namespace MyNameSpace
 		cout << "6 - Сортировка\n";
 		cout << "7 - Отфильтровать\n";
 		cout << "8 - Редактировать\n";
+		cout << "9 - Администраторы\n";
+		cout << "10 - Врачи\n";
 		cout << "0 - Вернуться в предыдущее меню\n";
 
 	}
@@ -1054,7 +1104,7 @@ namespace MyNameSpace
 		system("cls");
 		cout << "<<< Вход >>>\n\n";
 
-		string path = "D:\\adm.txt";
+		string path = "adm.txt";
 		fstream ful;
 		ful.open(path, fstream::in | fstream::out | fstream::app);
 		string pas, log, name;
