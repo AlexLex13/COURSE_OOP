@@ -42,14 +42,14 @@ namespace MyNameSpace
 	void Patient::SetUser()
 	{
 		cout << "<<< Меню добавления пользователя>>>\n\n";
-		cout << "Введите логин пользователя: (10 символов)\n";
+		cout << "Введите логин пользователя: (8 символов)\n";
 		cin >> loginU;
-		while (loginU.length() < 5)
+		while (loginU.length() < 8)
 		{
 			MessageBox(NULL, L"Логин не соответствует требованиям! Попробуйте снова!", L"ОШИБКА!", MB_OK);
 			cin.clear();
 			cin.ignore(32767, '\n');
-			cout << "Введите логин: (10 символов)\n";
+			cout << "Введите логин: (8 символов)\n";
 			cin >> loginU;
 		}
 		for (unsigned int i = 0; i < loginU.length() - 1; i++) {
@@ -59,14 +59,14 @@ namespace MyNameSpace
 		this->loginU = loginU;
 
 
-		cout << "Введите пароль пользователя: (10 символов)\n";
+		cout << "Введите пароль пользователя: (8 символов)\n";
 		cin >> passwordU;
-		while (passwordU.length() < 5)
+		while (passwordU.length() < 8)
 		{
 			MessageBox(NULL, L"Пароль не соответствует требованиям! Попробуйте снова!", L"ОШИБКА!", MB_OK);
 			cin.clear();
 			cin.ignore(32767, '\n');
-			cout << "Введите пароль: (10 символов)\n";
+			cout << "Введите пароль: (8 символов)\n";
 			cin >> passwordU;
 		}
 		for (unsigned int i = 0; i < passwordU.length() - 1; i++) {
@@ -217,14 +217,14 @@ namespace MyNameSpace
 		cout << "Введите имя администратора: ";
 		cin >> nameA;
 		this->nameA = nameA;
-		cout << "Введите логин: (10 символов)\n";
+		cout << "Введите логин: (8 символов)\n";
 		cin >> loginA;
-		while (loginA.length() < 10)
+		while (loginA.length() < 8)
 		{
 			MessageBox(NULL, L"Логин не соответствует требованиям! Попробуйте снова!", L"ОШИБКА!", MB_OK);
 			cin.clear();
 			cin.ignore(32767, '\n');
-			cout << "Введите логин: (10 символов)\n";
+			cout << "Введите логин: (8 символов)\n";
 			cin >> loginA;
 		}
 		for (unsigned int i = 0; i < loginA.length() - 1; i++) {
@@ -234,14 +234,14 @@ namespace MyNameSpace
 		this->loginA = loginA;
 
 
-		cout << "Введите пароль: (10 символов)\n";
+		cout << "Введите пароль: (8 символов)\n";
 		cin >> passwordA;
-		while (passwordA.length() < 10)
+		while (passwordA.length() < 8)
 		{
 			MessageBox(NULL, L"Пароль не соответствует требованиям! Попробуйте снова!", L"ОШИБКА!", MB_OK);
 			cin.clear();
 			cin.ignore(32767, '\n');
-			cout << "Введите пароль: (10 символов)\n";
+			cout << "Введите пароль: (8 символов)\n";
 			cin >> passwordA;
 		}
 		for (unsigned int i = 0; i < passwordA.length() - 1; i++) {
