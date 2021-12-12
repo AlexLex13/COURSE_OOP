@@ -43,6 +43,7 @@ namespace MyNameSpace
 	{
 		cout << "<<< Меню добавления пользователя>>>\n\n";
 		cout << "Введите логин пользователя: (8 символов)\n";
+		cout << "Ваш выбор ~> ";
 		cin >> loginU;
 		while (loginU.length() < 8)
 		{
@@ -50,6 +51,7 @@ namespace MyNameSpace
 			cin.clear();
 			cin.ignore(32767, '\n');
 			cout << "Введите логин: (8 символов)\n";
+			cout << "Ваш выбор ~> ";
 			cin >> loginU;
 		}
 		for (unsigned int i = 0; i < loginU.length() - 1; i++) {
@@ -60,6 +62,7 @@ namespace MyNameSpace
 
 
 		cout << "Введите пароль пользователя: (8 символов)\n";
+		cout << "Ваш выбор ~> ";
 		cin >> passwordU;
 		while (passwordU.length() < 8)
 		{
@@ -67,6 +70,7 @@ namespace MyNameSpace
 			cin.clear();
 			cin.ignore(32767, '\n');
 			cout << "Введите пароль: (8 символов)\n";
+			cout << "Ваш выбор ~> ";
 			cin >> passwordU;
 		}
 		for (unsigned int i = 0; i < passwordU.length() - 1; i++) {
@@ -78,6 +82,7 @@ namespace MyNameSpace
 
 	void Patient::PrintPeople()
 	{
+		cout << "———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n";
 		cout << "|" << setw(5) << this->id << "|" 
 			<< setw(20) << this->surname <<  "|" 
 			<< setw(20) << this->name <<  "|"
@@ -218,6 +223,7 @@ namespace MyNameSpace
 		cin >> nameA;
 		this->nameA = nameA;
 		cout << "Введите логин: (8 символов)\n";
+		cout << "Ваш выбор ~> ";
 		cin >> loginA;
 		while (loginA.length() < 8)
 		{
@@ -225,6 +231,7 @@ namespace MyNameSpace
 			cin.clear();
 			cin.ignore(32767, '\n');
 			cout << "Введите логин: (8 символов)\n";
+			cout << "Ваш выбор ~> ";
 			cin >> loginA;
 		}
 		for (unsigned int i = 0; i < loginA.length() - 1; i++) {
@@ -235,6 +242,7 @@ namespace MyNameSpace
 
 
 		cout << "Введите пароль: (8 символов)\n";
+		cout << "Ваш выбор ~> ";
 		cin >> passwordA;
 		while (passwordA.length() < 8)
 		{
@@ -242,6 +250,7 @@ namespace MyNameSpace
 			cin.clear();
 			cin.ignore(32767, '\n');
 			cout << "Введите пароль: (8 символов)\n";
+			cout << "Ваш выбор ~> ";
 			cin >> passwordA;
 		}
 		for (unsigned int i = 0; i < passwordA.length() - 1; i++) {
@@ -249,6 +258,11 @@ namespace MyNameSpace
 			passwordA[i] = (passwordA[i] - (char)'y') % 256;
 		}
 		this->passwordA = passwordA;
+	}
+
+	void Administrator::SetPeople()
+	{
+		cout << "Happy New Year!" << endl;
 	}
 
 	void Administrator::WriteFile(string path)
@@ -311,7 +325,7 @@ namespace MyNameSpace
 
 	int Doctor::cnt = 0;
 
-	void Doctor::SetUser()
+	void Doctor::SetPeople()
 	{
 		cout << "<<< Меню добавления врача>>>\n\n";
 		ChangeCnt();
@@ -353,7 +367,12 @@ namespace MyNameSpace
 
 	void Doctor::PrintPeople()
 	{
-		cout << this->id << " " << this->surname << " " << this->name << " " << this->patronymic << endl;
+		cout << "——————————————————————————————————————————————————————————————————————\n";
+		cout << "|" << setw(5) << this->id << "|"
+			<< setw(20) << this->surname << "|"
+			<< setw(20) << this->name << "|"
+			<< setw(20) << this->patronymic << "|" << endl;
+		cout << "——————————————————————————————————————————————————————————————————————\n";
 	}
 
 	string Doctor::Get_name()
@@ -361,9 +380,19 @@ namespace MyNameSpace
 		return this->name;
 	}
 
+	void Doctor::Set_name(string name)
+	{
+		this->name = name;
+	}
+
 	string Doctor::Get_surname()
 	{
 		return this->surname;
+	}
+
+	void Doctor::Set_surname(string surname)
+	{
+		this->surname = surname;
 	}
 
 	string Doctor::Get_patronymic()
@@ -371,9 +400,19 @@ namespace MyNameSpace
 		return this->patronymic;
 	}
 
+	void Doctor::Set_patronymic(string patronymic)
+	{
+		this->patronymic = patronymic;
+	}
+
 	string Doctor::Get_specialization()
 	{
 		return this->specialization;
+	}
+
+	void Doctor::Set_specialization(string specialization)
+	{
+		this->specialization = specialization;
 	}
 
 	template<class T>
@@ -467,7 +506,7 @@ namespace MyNameSpace
 			vis = 0;
 		}
 
-		cout << "Введите месяц: " << endl;
+		cout << "Введите месяц: ";
 		while (!(cin >> month) || (month > 12 || month < 1)) {
 			MessageBox(NULL, L"Введено неверное значение! Попробуйте снова!", L"ОШИБКА!", MB_OK);
 			cin.clear();
@@ -475,7 +514,7 @@ namespace MyNameSpace
 		}
 		this->month = month;
 
-		cout << "Введите день: " << endl;
+		cout << "Введите день: ";
 		switch (this->month) {
 
 		case 1:
@@ -536,6 +575,7 @@ namespace MyNameSpace
 			ch++;
 		}
 		cout << "Выберите время приема: ";
+		cout << "Ваш выбор ~> ";
 		while (!(cin >> var) || (var > 12 || var < 1)) {
 			MessageBox(NULL, L"Введено неверное значение! Попробуйте снова!", L"ОШИБКА!", MB_OK);
 			cin.clear();
@@ -606,6 +646,7 @@ namespace MyNameSpace
 			cout << "Вы хотите выбрать конкретного специалиста?" << endl;
 			cout << "1 - Да | 2 - Нет" << endl;
 			int choice;
+			cout << "Ваш выбор ~> ";
 			check(choice);
 			if (choice == 1)
 			{
@@ -616,6 +657,7 @@ namespace MyNameSpace
 						doct.at(i).PrintPeople();
 				}
 				cout << "Введите Id выбранного специалиста";
+				cout << "Ваш выбор ~> ";
 				check(specialist);
 				if (specialist < 1)
 				{
@@ -628,7 +670,7 @@ namespace MyNameSpace
 						if (specialist == doct.at(i).Get_ID())
 						{
 							this->spec = doct.at(i).Get_specialization();
-							this->doctor = doct.at(i).Get_surname() + doct.at(i).Get_name() + doct.at(i).Get_patronymic();
+							this->doctor = doct.at(i).Get_surname() + " " + doct.at(i).Get_name() + " " + doct.at(i).Get_patronymic();
 						}
 					}
 					break;
@@ -647,7 +689,7 @@ namespace MyNameSpace
 		this->cabinet = rand()%1000 + 101;
 		this->date.SetDate();
 		system("cls");
-		cout << "Ваш талон: \n\n";
+		cout << "Ваш талон: \n";
 		this->PrintTicket();
 	}
 
@@ -914,8 +956,10 @@ namespace MyNameSpace
 		int A, B, flag = 0;
 		printf("<<< Фильтрация по году рождения пациентов >>>\n");
 		printf("Введите значение от какого года начать фильрацию\n");
+		cout << "Ваш выбор ~> ";
 		check(A);
 		printf("Введите значение до какого года начать фильрацию\n");
+		cout << "Ваш выбор ~> ";
 		check(B);
 		for (int i = 0; i != p.size(); i++)
 		{
@@ -942,6 +986,7 @@ namespace MyNameSpace
 				p.at(i).PrintCard(i);
 			}
 			cout << "Введите id записи, которую хотите редактировать: " << endl;
+			cout << "Ваш выбор ~> ";
 			check(select_id);
 		}
 		else 
@@ -1144,7 +1189,7 @@ namespace MyNameSpace
 		}
 		ful.close();
 
-		cout << "Введите имя администратора:\n";
+		cout << "Введите имя администратора: ";
 		cin >> name;
 
 		int i = 0;
@@ -1157,7 +1202,7 @@ namespace MyNameSpace
 					i = 0;
 					cin.clear();
 					cin.ignore(32767, '\n');
-					cout << "Введите имя администратора:\n";
+					cout << "Введите имя администратора: ";
 					cin >> name;
 				}
 				else
@@ -1165,7 +1210,7 @@ namespace MyNameSpace
 			}
 		}
 
-		cout << "Введите логин\n";
+		cout << "Введите логин: ";
 		cin >> log;
 
 		while (log != p.at(i).loginA)
@@ -1174,14 +1219,14 @@ namespace MyNameSpace
 			if (a[0] == IDRETRY) {
 				cin.clear();
 				cin.ignore(32767, '\n');
-				cout << "Введите логин\n";
+				cout << "Введите логин: ";
 				cin >> log;
 			}
 			else
 				return 0;
 		}
 
-		cout << "Введите пароль\n";
+		cout << "Введите пароль: ";
 		cin >> pas;
 
 		while (pas != p.at(i).passwordA)
@@ -1190,7 +1235,7 @@ namespace MyNameSpace
 			if (a[1] == IDRETRY) {
 				cin.clear();
 				cin.ignore(32767, '\n');
-				cout << "Введите пароль\n";
+				cout << "Введите пароль: ";
 				cin >> pas;
 			}
 			else
@@ -1293,7 +1338,7 @@ namespace MyNameSpace
 		}
 		ful.close();
 
-		cout << "Введите логин\n";
+		cout << "Введите логин: ";
 		cin >> log;
 
 		while (log != A.loginU)
@@ -1302,7 +1347,7 @@ namespace MyNameSpace
 			if (a[0] == IDRETRY) {
 				cin.clear();
 				cin.ignore(32767, '\n');
-				cout << "Введите логин\n";
+				cout << "Введите логин: ";
 				cin >> log;
 			}
 			else
@@ -1310,7 +1355,7 @@ namespace MyNameSpace
 		}
 
 
-		cout << "Введите пароль\n";
+		cout << "Введите пароль: ";
 		cin >> pas;
 
 		while (pas != A.passwordU)
@@ -1319,7 +1364,7 @@ namespace MyNameSpace
 			if (a[1] == IDRETRY) {
 				cin.clear();
 				cin.ignore(32767, '\n');
-				cout << "Введите пароль\n";
+				cout << "Введите пароль: ";
 				cin >> pas;
 			}
 			else
