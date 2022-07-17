@@ -466,17 +466,17 @@ namespace MyNameSpace
 				cout << "————————————————————————————————————————————————" << endl;
 			}
 			if (st.wMonth == 4 || st.wMonth == 6 || st.wMonth == 9 || st.wMonth == 11)
-				cout << "|" << setw(2) << (st.wDay + i) % 30 + 1 << "." << setw(2) << st.wMonth << "|";
+				cout << "|" << setw(2) << setfill('0') << (st.wDay + i) % 30 + 1 << "." << setw(2) << setfill('0') << st.wMonth << "|";
 			else if (st.wMonth == 2)
-				cout << "|" << setw(2) << (st.wDay + i) % 28 + 1 << "." << setw(2) << st.wMonth << "|";
+				cout << "|" << setw(2) << setfill('0') << (st.wDay + i) % 28 + 1 << "." << setw(2) << setfill('0') << st.wMonth << "|";
 			else
-				cout << "|" << setw(2) << (st.wDay + i) % 31 + 1 << "." << setw(2) << st.wMonth << "|";
+				cout << "|" << setw(2) << setfill('0') << (st.wDay + i) % 31 + 1 << "." << setw(2) << setfill('0') << st.wMonth << "|";
 			i++;
-			if ((((st.wDay + i > 30) && (st.wMonth == 4 || st.wMonth == 6 || st.wMonth == 9 || st.wMonth == 11)) ||
-				((st.wDay + i > 31) && (st.wMonth == 1 || st.wMonth == 3 || st.wMonth == 5 || st.wMonth == 7 || st.wMonth == 10 || st.wMonth == 12 || st.wMonth == 8)) ||
-				((st.wDay + i > 28) && (st.wMonth == 2))) && flag == 0)
+			if ((((st.wDay + i >= 30) && (st.wMonth == 4 || st.wMonth == 6 || st.wMonth == 9 || st.wMonth == 11)) ||
+				((st.wDay + i >= 31) && (st.wMonth == 1 || st.wMonth == 3 || st.wMonth == 5 || st.wMonth == 7 || st.wMonth == 10 || st.wMonth == 12 || st.wMonth == 8)) ||
+				((st.wDay + i >= 28) && (st.wMonth == 2))) && flag == 0)
 			{
-				st.wMonth += 1;
+				st.wMonth = (st.wMonth) % 12 + 1;
 				flag = 1;
 			}
 		}
@@ -622,6 +622,7 @@ namespace MyNameSpace
 
 		while(true) 
 		{
+			cout << "<<<Меню заказа талона>>>" << endl;
 			cout << "1.Терапевт\n"
 				"2.Хирург\n"
 				"3.Офтальмолог\n"
@@ -635,7 +636,10 @@ namespace MyNameSpace
 			cout << "Введите специализацию врача: ";
 			check(choice_of_specialty);
 			if (choice_of_specialty > 10 || choice_of_specialty < 1)
+			{
 				Warning();
+				system("cls");
+			}
 			else
 				break;
 		}
@@ -643,46 +647,32 @@ namespace MyNameSpace
 
 		while (true)
 		{
-			cout << "Вы хотите выбрать конкретного специалиста?" << endl;
-			cout << "1 - Да | 2 - Нет" << endl;
-			int choice;
-			cout << "Ваш выбор ~> ";
-			check(choice);
-			if (choice == 1)
+
+			cout << "Выберите конкретного специалиста: " << endl;
+			for (unsigned int i = 0; i < doct.size(); i++)
 			{
-				cout << "Выберите конкретного специалиста: " << endl;
+				if (amount_spec[choice_of_specialty - 1] == doct.at(i).Get_specialization())
+					doct.at(i).PrintPeople();
+			}
+			cout << "Введите Id выбранного специалиста\n";
+			cout << "Ваш выбор ~> ";
+			check(specialist);
+			if (specialist < 1)
+			{
+				Warning(); continue;
+			}
+			else
+			{
 				for (unsigned int i = 0; i < doct.size(); i++)
 				{
-					if (amount_spec[choice_of_specialty - 1] == doct.at(i).Get_specialization())
-						doct.at(i).PrintPeople();
-				}
-				cout << "Введите Id выбранного специалиста";
-				cout << "Ваш выбор ~> ";
-				check(specialist);
-				if (specialist < 1)
-				{
-					Warning(); continue;
-				}
-				else
-				{
-					for (unsigned int i = 0; i < doct.size(); i++)
+					if (specialist == doct.at(i).Get_ID())
 					{
-						if (specialist == doct.at(i).Get_ID())
-						{
-							this->spec = doct.at(i).Get_specialization();
-							this->doctor = doct.at(i).Get_surname() + " " + doct.at(i).Get_name() + " " + doct.at(i).Get_patronymic();
-						}
+						this->spec = doct.at(i).Get_specialization();
+						this->doctor = doct.at(i).Get_surname() + " " + doct.at(i).Get_name() + " " + doct.at(i).Get_patronymic();
 					}
-					break;
 				}
-			}
-			/*else if (choice == 2)
-			{
-				this->doctor = doct[];
 				break;
-			}*/
-			else
-				Warning();
+			}
 		}
 		system("cls");
 
@@ -735,6 +725,30 @@ namespace MyNameSpace
 		fs.close();
 	}
 
+	void Ticket::ReadFile(string path, Ticket &ti, deque<Ticket> &dq_ti)
+	{
+		fstream fs;
+
+		fs.open(path, fstream::in | fstream::out | ios::app);
+
+		if (!fs.is_open())
+		{
+			cout << "Error!" << endl;
+		}
+		else if (fs.peek() == EOF)
+			cout << "-" << endl;
+		else
+		{
+			while (!fs.eof())
+			{
+				fs >> ti;
+				ti.Change_str();
+				dq_ti.push_back(ti);
+			}
+		}
+		fs.close();
+	}
+
 	void Ticket::Change_str()
 	{
 		for (unsigned int i = 0; i < this->doctor.length(); i++)
@@ -746,12 +760,14 @@ namespace MyNameSpace
 
 	void Ticket::PrintTicket()
 	{
-		cout << "\nВрач - " << this->Get_spec() << " - "
-			<< this->Get_doctor() << "; кабинет - "
-			<< this->Get_cabinet() << "; дата - "
-			<< this->date.Get_day() << "."
-			<< this->date.Get_month() << "; время - |"
-			<< this->date.Get_time() << "|;" << endl;
+		cout << "——————————————————————————————————————————————————————————————————————————————————————————————————————————————\n";
+		cout << "| Врач - " << setw(20) << this->Get_spec() << "|"
+			<< setw(30) << this->Get_doctor() << " | кабинет - "
+			<< setw(4) << this->Get_cabinet() << " | дата - "
+			<< setw(2) << this->date.Get_day() << "."
+			<< setw(2) << this->date.Get_month() << " | время - "
+			<< setw(5) << this->date.Get_time() << " |" << endl;
+		cout << "——————————————————————————————————————————————————————————————————————————————————————————————————————————————\n";
 	}
 
 	void Medical_card::SetCard()
@@ -918,20 +934,19 @@ namespace MyNameSpace
 
 	void menu_rec()
 	{
-
 		cout << "Выберите операцию\n";
 		cout << "1 - Просмотр медицинских карт пользователей\n";
 		cout << "2 - Добавление нового пользователя\n";
 		cout << "3 - Поиск пользователя по заданному параметру\n";
 		cout << "4 - Удаление пользователя\n";
 		cout << "5 - Посчитать количество пользователей\n";
-		cout << "6 - Сортировка учетных записей поьзователя в алфавитном порядке\n";
+		cout << "6 - Сортировка учетных записей пользователя в алфавитном порядке\n";
 		cout << "7 - Фильтрация пользователей по году рождения\n";
-		cout << "8 - Редактирование учетной записи поьзователя\n\n";
+		cout << "8 - Редактирование учетной записи пользователя\n\n";
 		cout << "9 - Управление администраторами\n";
 		cout << "10 - Работа со списком врачей\n";
+		cout << "11 - Просмотр отчета о заказанных талонах\n";
 		cout << "0 - Вернуться в предыдущее меню\n";
-
 	}
 
 	void Warning()
@@ -955,10 +970,10 @@ namespace MyNameSpace
 
 		int A, B, flag = 0;
 		printf("<<< Фильтрация по году рождения пациентов >>>\n");
-		printf("Введите значение от какого года начать фильрацию\n");
+		printf("Введите значение от какого года начать фильтрацию\n");
 		cout << "Ваш выбор ~> ";
 		check(A);
-		printf("Введите значение до какого года начать фильрацию\n");
+		printf("Введите значение до какого года начать фильтрацию\n");
 		cout << "Ваш выбор ~> ";
 		check(B);
 		for (int i = 0; i != p.size(); i++)
@@ -972,11 +987,12 @@ namespace MyNameSpace
 			cout << "Нет клиентов с таким годом рождения!" << endl;
 	}
 
-	void edit(deque<Medical_card> &p, int var)
+	void edit(deque<Medical_card> &p, int var) 
 	{
 		int variable, flag = 0;
 		string find_parameter;
 		int int_find_parameter, select_id, have_ticket = 0;
+		int *ptr = new int;    //Использование динамической памяти
 		Ticket tick;
 
 		if (var == 0)
@@ -1113,6 +1129,7 @@ namespace MyNameSpace
 				p.at(j).WriteFile("path.txt");
 			}
 		}
+		delete ptr;
 	}
 
 	void destruction(deque<Medical_card> &p, int i)
@@ -1248,6 +1265,7 @@ namespace MyNameSpace
 	{
 		int variable, flag = 0;
 		string find_parameter;
+		cout << "<<< Меню поиска >>>\n\n";
 		cout << "По какому параметру вы хотите осуществить поиск: \n";
 		cout << "1.Фамилия\n";
 		cout << "2.Имя\n";
